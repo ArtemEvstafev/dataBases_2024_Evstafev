@@ -1,0 +1,35 @@
+CREATE TABLE sales (
+    id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    sale_date DATE NOT NULL,
+    quantity INT NOT NULL,
+    price NUMERIC(10, 2) NOT NULL
+);
+
+INSERT INTO sales (product_id, sale_date, quantity, price)
+SELECT
+    (random() * 100)::INT + 1 AS product_id,
+    CURRENT_DATE - ((random() * 365)::INT) AS sale_date, 
+    (random() * 10)::INT + 1 AS quantity, 
+    (random() * 100)::NUMERIC(10, 2) + 1 AS price 
+FROM generate_series(1, 100000);  
+
+ANALYZE sales;
+
+EXPLAIN ANALYZE
+SELECT product_id, SUM(quantity * price) AS total_sales
+FROM sales
+WHERE product_id = 50
+GROUP BY product_id;
+
+SELECT sale_date, SUM(quantity) AS total_quantity
+FROM sales
+WHERE sale_date > CURRENT_DATE - INTERVAL '1 month'
+GROUP BY sale_date
+ORDER BY sale_date;
+
+ALTER TABLE sales SET (autovacuum_enabled = FALSE);
+
+UPDATE sales
+SET product_id = 1
+WHERE product_id < 50;
