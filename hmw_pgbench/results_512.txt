@@ -1,0 +1,11 @@
+pgbench (14.15 (Ubuntu 14.15-0ubuntu0.22.04.1))
+transaction type: ./insert_test.sql
+scaling factor: 1
+query mode: simple
+number of clients: 10
+number of threads: 8
+duration: 120 s
+number of transactions actually processed: 1015086
+latency average = 1.182 ms
+initial connection time = 53.664 ms
+tps = 8462.661159 (without initial connection time)
